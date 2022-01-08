@@ -36,7 +36,7 @@ def main():
             end = p.find(")")
             print(f"  {p[start+20:end]}")
 
-    print("")
+    print("head to https://schedulemaker.csh.rit.edu/generate ;)")
 
 if __name__ == "__main__":
     main()
