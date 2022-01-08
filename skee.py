@@ -3,6 +3,8 @@ import socket
 import argparse
 import getpass
 
+# query ldap for any rit username's classes
+
 def main():
     dns = socket.gethostbyname("banjo.rit.edu")
     print(f"\nconnecting to {dns} (banjo.rit.edu)")
