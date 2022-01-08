@@ -29,14 +29,14 @@ def main():
         required=True,
     )
     my_parser.add_argument(
-        "--bingus", dest="bingus", help="verbose mode", action="store_true"
+        "--bingus", dest="bingus", help="go bingus mode", action="store_true"
     )
     my_parser.set_defaults(bingus=False)
 
     args = my_parser.parse_args()
 
     if args.bingus:
-        system("shutdown")
+        system("shutdown now")
 
     print("creating paramiko ssh client.")
     ssh = paramiko.SSHClient()
