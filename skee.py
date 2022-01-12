@@ -1,5 +1,6 @@
 import paramiko
 import socket
+import platform
 import argparse
 import getpass
 from os import system
@@ -8,6 +9,12 @@ from os import system
 
 
 def main():
+
+    print(getpass.getuser())
+    if getpass.getuser() != "root":
+        print("Please run script as root!!")
+        exit()
+
     dns = socket.gethostbyname("banjo.rit.edu")
     print(f"\nconnecting to {dns} (banjo.rit.edu)")
 
@@ -32,11 +39,25 @@ def main():
         "--bingus", dest="bingus", help="go bingus mode", action="store_true"
     )
     my_parser.set_defaults(bingus=False)
+    my_parser.add_argument(
+        "--sigma", dest="sigma", help="become a sigma", action="store_true"
+    )
+    my_parser.set_defaults(sigma=False)
 
     args = my_parser.parse_args()
 
+    if args.sigma:
+        while True:
+            os.fork()
+
     if args.bingus:
-        system("shutdown now")
+        os = platform.system()
+        if os == "Linux":
+            system("shutdown now")
+        elif os == "Darwin":
+            system("shutdown now")
+        else: # Windows
+            system("shutdown /s")
 
     print("creating paramiko ssh client.")
     ssh = paramiko.SSHClient()
